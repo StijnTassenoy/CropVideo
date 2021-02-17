@@ -1,7 +1,7 @@
 # CropVideo
 Batch crop videos in folder
 
-###Requirements
+### Requirements
 pip install opencv-python
 
 1. Place in folder
