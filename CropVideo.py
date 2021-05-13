@@ -13,6 +13,8 @@ def getAllVideos(extension):
 extension_type = input("Enter extension type: ")
 cut_from_top = input("How much from top?: ")
 cut_from_bottom = input("How much from bottom?: ")
+cut_from_left = input("How much from left?: ")
+cut_from_right = input("How much from right?: ")
 allvids = getAllVideos(extension_type)
 
 try:
@@ -21,9 +23,11 @@ try:
         vid = cv2.VideoCapture(allvids[i])
         height = vid.get(cv2.CAP_PROP_FRAME_HEIGHT)
         width = vid.get(cv2.CAP_PROP_FRAME_WIDTH)
+        width -= int(cut_from_left)
+        width -= int(cut_from_right)
         episode = allvids[i][:-len(extension_type)-1]+"_cropped."+extension_type
         downside = str(float(height)-float(cut_from_bottom)-float(cut_from_top))[:-2]
-        print(downside)
-        subprocess.call(["ffmpeg", "-i", allvids[i], "-vf", "crop="+str(width)[:-2]+":"+downside+":0:"+cut_from_top, "-c:v", "libx264", "-crf", "0", "-c:a", "copy", episode])
+        #? input(f"w={str(width)[:-2]} h={downside} x={cut_from_left} y={cut_from_top}")
+        subprocess.call(["ffmpeg", "-i", allvids[i], "-vf", "crop="+str(width)[:-2]+":"+downside+":" + cut_from_left + ":"+cut_from_top, "-c:v", "libx264", "-crf", "0", "-c:a", "copy", episode])
 except:
     print("Couldn't find")
